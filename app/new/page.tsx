@@ -13,6 +13,7 @@ async function createTask(data: FormData) {
 
   await prisma.task.create({ data: { title, description, complete: false } });
   redirect("/");
+  // need to fix description
 }
 
 export default function Page() {
@@ -34,6 +35,23 @@ export default function Page() {
           placeholder="Description"
           className="border border-slate-300 text-slate-500 px-2 py-1 rounded outline-none focus-within:bg-slate-100"
         />
+        <div className="flex gap-4">
+          <select
+            name="priority"
+            className="border border-slate-300 text-slate-500 px-2 py-1 rounded outline-none focus-within:bg-slate-100"
+          >
+            <option value="">Select Priority</option>
+            <option value="high">High Priority</option>
+            <option value="medium">Medium Priority</option>
+            <option value="low">Low Priority</option>
+          </select>
+          <input
+            type="date"
+            name="dueDate"
+            className="border border-slate-300 text-slate-500 px-2 py-1 rounded outline-none focus-within:bg-slate-100"
+            placeholder="Due Date"
+          />
+        </div>
         <div className="flex gap-1 justify-end">
           <button
             type="submit"
