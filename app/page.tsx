@@ -8,6 +8,12 @@ function getTasks() {
   return prisma.task.findMany();
 }
 
+async function toggleTask(id: string, complete: boolean) {
+  "use server"
+
+  await prisma.task.update({ where: { id }, data: { complete }})
+}
+
 export default async function Home() {
   const tasks = await getTasks();
   // await prisma.task.create({
@@ -22,12 +28,12 @@ export default async function Home() {
           className="border border-slate-300 text-slate-300 px-2 py-1 rounded outline-none bg-transparent focus-within:bg-slate-100 hover:bg-cyan-600 "
           href="/new"
         >
-          New
+          + Add New Task
         </Link>
       </header>
       <ul className="pl-4">
         {tasks.map((task) => (
-          <TaskItem key={task.id} {...task} />
+          <TaskItem key={task.id} {...task} toggleTask={toggleTask} />
         ))}
       </ul>
     </>

@@ -20,7 +20,7 @@ export default function Page() {
   return (
     <>
       <header className="flex justify-between items-center mb-4 mt-4">
-        <h1 className="text-3xl">New</h1>
+        <h1 className="text-3xl">New Task</h1>
       </header>
       <form action={createTask} className="flex gap-2 flex-col">
         <input
@@ -55,13 +55,13 @@ export default function Page() {
         <div className="flex gap-1 justify-end">
           <button
             type="submit"
-            className="border border-slate-300 text-slate-300 px-2 py-1 bg-transparent rounded outline-none focus-within:bg-slate-100  hover:bg-cyan-600"
+            className="border border-slate-300 text-slate-300 px-2 py-1 bg-transparent rounded outline-none focus-within:bg-slate-100  hover:bg-cyan-600 hover:text-lg"
           >
             Create
           </button>
           <Link
             href=".."
-            className="border border-slate-300 text-slate-300 px-2 py-1 bg-transparent rounded outline-none focus-within:bg-slate-100  hover:bg-cyan-600"
+            className="border border-slate-300 text-slate-300 px-2 py-1 bg-transparent rounded outline-none focus-within:bg-slate-100  hover:bg-cyan-600 hover:text-lg"
           >
             Cancel
           </Link>
