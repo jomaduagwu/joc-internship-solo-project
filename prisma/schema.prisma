@@ -11,12 +11,15 @@ datasource db {
 }
 
 model Task {
-  id          String @id @default(uuid())
+  id          Int @id @default(autoincrement())
   title       String
   description String
-  complete    Boolean
+  priority    String
   dueDate     DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  complete    Boolean
 
 }
+
+
