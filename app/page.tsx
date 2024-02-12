@@ -2,20 +2,33 @@ import { TaskItem } from "@/components/TaskItem";
 import { prisma } from "./db";
 
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-function getTasks() {
+async function getTasks() {
   return prisma.task.findMany();
 }
 
-async function toggleTask(id: string, complete: boolean) {
-  "use server"
-
-  await prisma.task.update({ where: { id }, data: { complete }})
+async function deleteTask(id: number) {
+  await prisma.task.delete({
+    where: {
+      id,
+    },
+  });
 }
+// async function toggleTask(id: string, complete: boolean) {
+//   "use server"
+
+//   await prisma.task.update({ where: { id }, data: { complete }})
+// }
 
 export default async function Home() {
   const tasks = await getTasks();
+
+  async function toggleTask(id: string, complete: boolean) {
+    "use server";
+
+    await prisma.task.update({ where: { id }, data: { complete } });
+  }
   // await prisma.task.create({
   //   data: { title: "test", description: "testing", complete: false },
   // });
@@ -33,7 +46,16 @@ export default async function Home() {
       </header>
       <ul className="pl-4">
         {tasks.map((task) => (
-          <TaskItem key={task.id} {...task} toggleTask={toggleTask} />
+          <TaskItem
+            key={task.id}
+            id={task.id}
+            title={task.title}
+            description={task.description}
+            dueDate={task.dueDate}
+            priority={task.priority}
+            complete={task.complete}
+            toggleTask={toggleTask}
+          />
         ))}
       </ul>
     </>
