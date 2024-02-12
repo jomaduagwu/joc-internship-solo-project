@@ -6,20 +6,27 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model Task {
-  id          Int @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   description String
-  priority    String
-  dueDate     DateTime?
+  priority    Level
+  dueDate     DateTime
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   complete    Boolean
 
 }
+
+enum Level {
+  Low
+  Medium
+  High
+}
+
 
 
