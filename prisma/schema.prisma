@@ -23,9 +23,9 @@ model Task {
 }
 
 enum Level {
-  Low
-  Medium
-  High
+  LOW
+  MEDIUM
+  HIGH
 }
 
 
