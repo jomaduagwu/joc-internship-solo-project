@@ -1,17 +1,19 @@
 import Link from "next/link";
 import { prisma } from "../db";
 import { redirect } from "next/navigation";
-import { Level } from "../../components/enum"
+import { Level } from "../components/enum";
 
 async function createTask(data: FormData) {
   "use server";
 
   console.log("Enum values:", Level);
-  
+
   const title = data.get("title")?.valueOf();
   const description = data.get("description")?.valueOf() || " ";
   const dueDateInput = data.get("dueDate");
-  const dueDate = dueDateInput ? new Date(dueDateInput as string).toISOString() : null;
+  const dueDate = dueDateInput
+    ? new Date(dueDateInput as string).toISOString()
+    : null;
   const priorityValue = data.get("priority")?.valueOf();
 
   if (typeof title !== "string" || title.length === 0) {
@@ -26,7 +28,9 @@ async function createTask(data: FormData) {
     throw new Error("Invalid priority level");
   }
 
-  await prisma.task.create({ data: { title, description, dueDate, complete: false, priority } });
+  await prisma.task.create({
+    data: { title, description, dueDate, complete: false, priority },
+  });
   redirect("/");
 }
 
