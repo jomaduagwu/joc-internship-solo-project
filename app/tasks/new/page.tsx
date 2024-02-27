@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { taskSchema } from "@/app/validationSchemas";
 import { z } from 'zod';
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 // import React from 'react'
 
 type TaskForm = z.infer<typeof taskSchema>;
@@ -29,7 +30,7 @@ const NewTaskPage = () => {
     resolver: zodResolver(taskSchema)
   });
   const [error, setError] = useState('');
-  console.log(register('title'));
+  const [isSubmitting, setSubmitting] = useState(false);
   return (
     <div className="max-w-xl">
       {error && <Callout.Root color="red" className="mb-5">
@@ -39,9 +40,11 @@ const NewTaskPage = () => {
           className="space-y-3" 
           onSubmit={handleSubmit(async (data) => {
             try {
+              setSubmitting(true);
               await axios.post('/api/tasks', data);
               router.push('/tasks');
             } catch (error) {
+              setSubmitting(false);
               setError('An unexpected error occured.');
             }
           })}>
@@ -58,7 +61,7 @@ const NewTaskPage = () => {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
       {/*   <SimpleMdeReact placeholder="Description" /> */}
-        <Button>Submit New Task</Button>
+        <Button disabled={isSubmitting}>Submit New Task {isSubmitting && <Spinner />}</Button>
       </form>
     </div>
   );
