@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
-import { taskSchema } from "@/app/schema";
+import { taskSchema } from "@/app/validationSchemas";
 
 
 export async function POST(request: NextRequest) {

@@ -1,10 +1,10 @@
 import { ZodBoolean, z } from 'zod';
 
 export const taskSchema = z.object({
-    title: z.string().min(1, "Task name is required.").max(255),
+    title: z.string().min(1, "Title name is required.").max(255),
     description: z.string().min(1, "Description is required.").max(65535),
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH'], {
-        errorMap: () => ({ message: "Please use of of the priority options" }),
+        errorMap: () => ({ message: "Please use one of the priority options" }),
     }),
     dueDate: z.union([z.string(), z.date()]) 
     .refine((value) => {
