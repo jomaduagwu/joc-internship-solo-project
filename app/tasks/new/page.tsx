@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Callout, DropdownMenu, Text, TextArea, TextField } from "@radix-ui/themes";
+import { Button, Callout, DropdownMenu, Select, Text, TextArea, TextField } from "@radix-ui/themes";
 import SimpleMDE, { SimpleMdeReact } from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useForm, Controller } from "react-hook-form";
@@ -13,6 +13,10 @@ import { taskSchema } from "@/app/validationSchemas";
 import { z } from 'zod';
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { Level } from '@prisma/client';
+
 // import React from 'react'
 
 type TaskForm = z.infer<typeof taskSchema>;
@@ -24,15 +28,17 @@ type TaskForm = z.infer<typeof taskSchema>;
 //   // priority: string;
 // }
 
-const NewTaskPage = () => {
+const NewTaskPage = ({ task }: { task?: Task}) => {
   const router = useRouter();
-  const { register, control, handleSubmit, formState: { errors } } = useForm<TaskForm>({
+  const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<TaskForm>({
     resolver: zodResolver(taskSchema)
   });
   const [error, setError] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
+
   return (
     <div className="max-w-xl">
+      {/* render error if unexpected error */}
       {error && <Callout.Root color="red" className="mb-5">
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>}
@@ -41,8 +47,12 @@ const NewTaskPage = () => {
           onSubmit={handleSubmit(async (data) => {
             try {
               setSubmitting(true);
-              await axios.post('/api/tasks', data);
+              if (task)
+                await axios.patch('/api/tasks/' + task.id, data);
+              else
+                await axios.post('/api/tasks', data);
               router.push('/tasks');
+              router.refresh();
             } catch (error) {
               setSubmitting(false);
               setError('An unexpected error occured.');
@@ -61,7 +71,38 @@ const NewTaskPage = () => {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
       {/*   <SimpleMdeReact placeholder="Description" /> */}
-        <Button disabled={isSubmitting}>Submit New Task {isSubmitting && <Spinner />}</Button>
+
+        <Controller
+          name="dueDate"
+          control={control}
+          render={({ field }) => (
+            <DatePicker 
+              selected={field.value}
+              onChange={(date: Date) => field.onChange(date)}
+              placeholderText="Due Date"
+            />
+          )}
+        />
+        <ErrorMessage>{errors.dueDate?.message}</ErrorMessage>
+        <Select.Root
+          defaultValue={task?.priority}
+          onValueChange={(newValue: string) => setValue("priority", newValue as Level)}
+        >
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Group>
+              <Select.Label>Priority</Select.Label>
+              {Object.values(Level).map((priority) => (
+                <Select.Item key={priority} value={priority}>
+                  {priority}
+                </Select.Item>
+              ))}
+            </Select.Group>
+          </Select.Content>
+        </Select.Root>
+        <div>
+          <Button disabled={isSubmitting}>{task? 'Update Task' : 'Create New Task'} {isSubmitting && <Spinner />}</Button>
+        </div>
       </form>
     </div>
   );
