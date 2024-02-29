@@ -8,7 +8,7 @@ const EditTaskButton = ({taskId}: {taskId: number}) => {
   return (
     <Button color="green">
       <Pencil2Icon />
-      <Link href={`/tasks/${taskId}/edit`}>Edit Task</Link>
+      <Link href={`/tasks/edit/${taskId}`}>Edit Task</Link>
     </Button>
   );
 };
