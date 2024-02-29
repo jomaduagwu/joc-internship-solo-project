@@ -1,88 +1,120 @@
-import { TaskItem } from "@/components/TaskItem";
-import { prisma } from "./db";
+// // import { TaskItem } from "@/app/components/TaskItem";
+// // import { prisma } from "./db";
+// import prisma from '@/prisma/client';
 
-import Link from "next/link";
-import React, { useState, useEffect } from "react";
+// import Link from "next/link";
+// import React, { useState, useEffect } from "react";
 
-async function getTasks() {
-  return prisma.task.findMany();
-}
+// import { Level } from "@/app/components/enum"
+// // import { getTasks } from "@/app/api/tasks";
 
-async function deleteTask(id: number) {
-  await prisma.task.delete({
-    where: {
-      id,
-    },
-  });
-}
-// async function toggleTask(id: string, complete: boolean) {
-//   "use server"
+// // function to fetch tasks
+// // async function getTasks() {
+// //   return prisma.task.findMany();
+// // }
 
-//   await prisma.task.update({ where: { id }, data: { complete }})
+// // async function toggleTask(id: number, complete: boolean) {
+// //   "use server";
+// //   await prisma.task.update({ where: { id }, data: { complete } });
+// // }
+
+// // async function handleDeleteTask(id: number) {
+// //   await prisma.task.delete({ where: { id } });
+// // }
+
+// // async function handleEditTask(id: number, updatedTask: Task) {
+// //   await prisma.task.update({ where: { id }, data: updatedTask });
+// // }
+
+// export default async function Home() {
+//   // // define state to hold tasks
+//   // const tasks = await getTasks();
+
+//   // // await prisma.task.create({
+//   // //   data: { title: "test", description: "testing", complete: false },
+//   // // });
+//   const [tasks, setTasks] = useState<Task[]>([]);
+
+//   useEffect(() => {
+//     const fetchTasks = async () => {
+//       try {
+//         const tasksData = await getTasks();
+//         setTasks(tasksData);
+//       } catch (error) {
+//         console.error('Error fetching tasks:', error);
+//       }
+//     };
+
+//     fetchTasks();
+//   }, []);
+
+//   // const handleTaskUpdate = (taskId: number, updatedTaskData: Task) => {
+//   //   const updatedTasks = tasks.map(task => {
+//   //     if (task.id === taskId) {
+//   //       return { ...task, ...updatedTaskData };
+//   //     }
+//   //     return task;
+//   //   });
+//   //   setTasks(updatedTasks);
+//   // };
+
+//   return (
+//     <>
+//       <header className="mb-4 mt-4">
+//         <h1 className="text-3xl text-center my-5">Task Manager</h1>
+//         <div className="py-6 text-center">
+//           <Link
+//             className="border border-slate-300 text-slate-300 px-2 py-1 rounded outline-none bg-transparent focus-within:bg-slate-100 hover:bg-cyan-600 "
+//             href="/new"
+//           >
+//             + Add New Task
+//           </Link>
+//         </div>
+//       </header>
+//       <ul className="pl-4">
+//         {tasks.map((task) => (
+//           <TaskItem
+//             key={task.id}
+//             id={task.id}
+//             title={task.title}
+//             description={task.description}
+//             dueDate={task.dueDate}
+//             priority={task.priority as Level}
+//             complete={task.complete}
+//             toggleTask={toggleTask}
+//             onTaskUpdate={handleTaskUpdate}
+
+//             // onDeleteTask={handleDeleteTask(task.id)} // not working
+//           />
+//         ))}
+//       </ul>
+//     </>
+
+//       );
 // }
 
+import LatestTasks from "./LatestTasks";
+import TaskSummary from "./TaskSummary";
+// import Pagination from "./components/Pagination";
+import prisma from "@/prisma/client";
+
 export default async function Home() {
-  const tasks = await getTasks();
-
-  async function toggleTask(id: string, complete: boolean) {
-    "use server";
-
-    await prisma.task.update({ where: { id }, data: { complete } });
-  }
-  // await prisma.task.create({
-  //   data: { title: "test", description: "testing", complete: false },
-  // });
+  const open = await prisma.task.count({
+    where: { status: 'OPEN' },
+  });
+  const inProgress = await prisma.task.count({
+    where: { status: 'IN_PROGRESS' },
+  });
+  const closed = await prisma.task.count({
+    where: { status: 'CLOSED' },
+  });
 
   return (
     <>
-      <header className="flex justify-between items-center mb-4 mt-4">
-        <h1 className="text-3xl">Tasks</h1>
-        <Link
-          className="border border-slate-300 text-slate-300 px-2 py-1 rounded outline-none bg-transparent focus-within:bg-slate-100 hover:bg-cyan-600 "
-          href="/new"
-        >
-          + Add New Task
-        </Link>
-      </header>
-      <ul className="pl-4">
-        {tasks.map((task) => (
-          <TaskItem
-            key={task.id}
-            id={task.id}
-            title={task.title}
-            description={task.description}
-            dueDate={task.dueDate}
-            priority={task.priority}
-            complete={task.complete}
-            toggleTask={toggleTask}
-          />
-        ))}
-      </ul>
+      <div className='mb-5'>
+        <TaskSummary open={open} inProgress={inProgress} closed={closed} />
+      </div>
+      <LatestTasks />
     </>
-
-    // <div className="flex flex-col items-center justify-center min-h-screen">
-    //   <header className="bg-gray-800 text-white w-full py-4">
-    //     <div className="container mx-auto">
-    //       <h1 className="text-2xl font-bold">Task Manager</h1>
-    //     </div>
-    //   </header>
-    //   <main className="container mx-auto mt-8">
-    //     {/* Task list component will go here */}
-    //     <div className="bg-white p-4 rounded shadow">
-    //       <h2 className="text-lg font-semibold mb-4">Task List</h2>
-    //       <ul>
-    //         {/* Individual task components will go here */}
-    //         <li className="border-b py-2">Task 1</li>
-    //         <li className="border-b py-2">Task 2</li>
-    //         <li className="border-b py-2">Task 3</li>
-    //       </ul>
-    //     </div>
-    //   </main>
-    //   <footer className="bg-gray-800 text-white w-full py-4 mt-auto">
-    //     <div className="container mx-auto">
-    //       <p className="text-center">Footer content here</p>
-    //     </div>
-    //   </footer>
-    // </div>
   );
 }

@@ -1,11 +1,21 @@
 import React from "react";
 import { Button } from "@radix-ui/themes";
 import Link from "next/link";
+import LatestTasks from "../LatestTasks";
 
 const TasksPage = () => {
   return (
     <div>
-      <Button><Link href='/tasks/new'>New Task</Link> </Button>
+      <div className="mb-4">
+        <Button>
+          <Link href="/tasks/new">Add New Task</Link>{" "}
+        </Button>
+       
+      </div>
+       {/* displayed latest tasks below the button to add a new task*/}
+      <div>
+        <LatestTasks />
+      </div>
     </div>
   );
 };

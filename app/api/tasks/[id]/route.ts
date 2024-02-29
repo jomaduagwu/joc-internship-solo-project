@@ -7,7 +7,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   const body = await request.json();
-  const validation = taskSchema.safeParse(body);
+  const validation =updateTaskSchema.safeParse(body);
   if (!validation.success)
     return NextResponse.json(validation.error.format(), {
       status: 400,

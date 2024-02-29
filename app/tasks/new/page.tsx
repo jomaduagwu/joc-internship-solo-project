@@ -36,6 +36,10 @@ const NewTaskPage = ({ task }: { task?: Task}) => {
   const [error, setError] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
 
+  const handleCancel = () => {
+    router.push('/'); // Navigate back to the home page
+  };
+
   return (
     <div className="max-w-xl">
       {/* render error if unexpected error */}
@@ -100,8 +104,9 @@ const NewTaskPage = ({ task }: { task?: Task}) => {
             </Select.Group>
           </Select.Content>
         </Select.Root>
-        <div>
+        <div className="flex space-x-4">
           <Button disabled={isSubmitting}>{task? 'Update Task' : 'Create New Task'} {isSubmitting && <Spinner />}</Button>
+          <Button onClick={handleCancel}>Cancel</Button>
         </div>
       </form>
     </div>
