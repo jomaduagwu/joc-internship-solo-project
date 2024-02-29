@@ -12,7 +12,6 @@ const TasksPage = () => {
         </Button>
        
       </div>
-       {/* displayed latest tasks below the button to add a new task*/}
       <div>
         <LatestTasks />
       </div>

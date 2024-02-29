@@ -33,8 +33,6 @@ const NavBar = () => {
           </Link>
         ))}
 
-        {/* <li className="hover:text-slate-400 transition-colors"><Link href="/">Dashboard</Link></li>
-        <li className="hover:text-slate-400 transition-colors"><Link href="/tasks">Tasks</Link></li> */}
       </ul>
     </nav>
   );

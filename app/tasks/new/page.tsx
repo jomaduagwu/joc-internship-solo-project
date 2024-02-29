@@ -17,16 +17,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Level } from '@prisma/client';
 
-// import React from 'react'
 
 type TaskForm = z.infer<typeof taskSchema>;
 
-// interface TaskForm {
-//   title: string;
-//   description: string;
-//   // dueDate: Date | null;
-//   // priority: string;
-// }
 
 const NewTaskPage = ({ task }: { task?: Task}) => {
   const router = useRouter();
@@ -37,12 +30,11 @@ const NewTaskPage = ({ task }: { task?: Task}) => {
   const [isSubmitting, setSubmitting] = useState(false);
 
   const handleCancel = () => {
-    router.push('/'); // Navigate back to the home page
+    router.push('/'); 
   };
 
   return (
     <div className="max-w-xl">
-      {/* render error if unexpected error */}
       {error && <Callout.Root color="red" className="mb-5">
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>}
@@ -74,8 +66,6 @@ const NewTaskPage = ({ task }: { task?: Task}) => {
           )} 
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-      {/*   <SimpleMdeReact placeholder="Description" /> */}
-
         <Controller
           name="dueDate"
           control={control}

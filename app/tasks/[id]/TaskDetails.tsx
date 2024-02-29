@@ -8,9 +8,6 @@ const TaskDetails = ({ task }: { task: Task }) => {
     <>
       <Heading>{task.title}</Heading>
       <Separator my="3" size="4" />
-      {/* <Text color="gray">
-        Create On: {todo.createdAt.toDateString()}
-      </Text> */}
       <div>
         <TaskStatusBadge
           status={task.status}
