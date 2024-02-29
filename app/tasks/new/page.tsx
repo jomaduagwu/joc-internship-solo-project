@@ -40,7 +40,7 @@ const NewTaskPage = ({ task }: { task?: Task}) => {
         </Callout.Root>}
       <form 
           className="space-y-3" 
-          onSubmit={handleSubmit(async (data) => {
+          onSubmit={handleSubmit(async (data: TaskForm) => {
             try {
               setSubmitting(true);
               if (task)

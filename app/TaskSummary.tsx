@@ -28,7 +28,7 @@ const TaskSummary = ({ open, inProgress, closed }: Props) => {
             <Flex direction="column" gap="1">
               <Link
                 className="text-sm font-medium"
-                href={`/todos/list?status${container.status}`}
+                href={`/tasks/list?status${container.status}`}
               >
                 {container.label}
               </Link>
